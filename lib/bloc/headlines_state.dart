@@ -7,8 +7,12 @@ class HeadlinesInitial extends HeadlinesState {}
 
 class HeadlinesLoading extends HeadlinesState {}
 
-class HeadlinesLoaded extends HeadlinesState {
-  final model;
+class HeadlinesError extends HeadlinesState {}
 
-  HeadlinesLoaded(this.model);
+class HeadlinesLoaded extends HeadlinesState {
+  final List<NewsModel> modelBreaking;
+  final List<NewsModel> modelTech;
+  final NewsModel modelHead;
+
+  HeadlinesLoaded(this.modelBreaking, this.modelTech, this.modelHead);
 }
