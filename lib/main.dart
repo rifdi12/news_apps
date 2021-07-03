@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_apps/bloc/detail_bloc.dart';
 import 'package:news_apps/bloc/headlines_bloc.dart';
 import 'package:news_apps/bloc/search_bloc.dart';
+import 'package:news_apps/detail_news.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 void main() {
@@ -48,6 +49,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
+    timeago.setLocaleMessages('id', timeago.IdMessages());
     BlocProvider.of<HeadlinesBloc>(context).add(GetHeadlines());
     super.initState();
   }
@@ -71,54 +73,64 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(24),
-                      height: 350,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(30)),
-                        image: DecorationImage(
-                            image: NetworkImage(
-                              '${state.modelHead.urlToImage}',
-                            ),
-                            fit: BoxFit.cover),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailNews(
+                            newsModel: state.modelHead,
+                          ),
+                        ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${state.modelHead.title}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'Baca Selengkapnya',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
+                      child: Container(
+                        padding: EdgeInsets.all(24),
+                        height: 350,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.vertical(
+                              bottom: Radius.circular(30)),
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                '${state.modelHead.urlToImage}',
                               ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Icon(
-                                Icons.arrow_right_alt_outlined,
+                              fit: BoxFit.cover),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              '${state.modelHead.title}',
+                              style: TextStyle(
                                 color: Colors.white,
-                              )
-                            ],
-                          )
-                        ],
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Baca Selengkapnya',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Icon(
+                                  Icons.arrow_right_alt_outlined,
+                                  color: Colors.white,
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -143,48 +155,58 @@ class _MyHomePageState extends State<MyHomePage> {
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (ctx, index) {
-                            return Container(
-                              width: 250,
-                              margin: EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Image.network(
-                                      '${state.modelBreaking[index].urlToImage}',
-                                      height: 150,
+                            return GestureDetector(
+                              onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailNews(
+                                    newsModel: state.modelBreaking[index],
+                                  ),
+                                ),
+                              ),
+                              child: Container(
+                                width: 250,
+                                margin: EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Image.network(
+                                        '${state.modelBreaking[index].urlToImage}',
+                                        height: 150,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    '${state.modelBreaking[index].title}',
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    '${timeago.format(DateTime.parse(state.modelBreaking[index].publishedAt), locale: 'id')}',
-                                    style: TextStyle(
-                                        color: Colors.black45, fontSize: 12),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Text(
-                                    '${state.modelBreaking[index].source.name}',
-                                    style: TextStyle(
-                                        color: Colors.black45, fontSize: 12),
-                                  )
-                                ],
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      '${state.modelBreaking[index].title}',
+                                      style: TextStyle(
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      '${timeago.format(DateTime.parse(state.modelBreaking[index].publishedAt), locale: 'id')}',
+                                      style: TextStyle(
+                                          color: Colors.black45, fontSize: 12),
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text(
+                                      '${state.modelBreaking[index].source.name}',
+                                      style: TextStyle(
+                                          color: Colors.black45, fontSize: 12),
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           }),
@@ -209,59 +231,69 @@ class _MyHomePageState extends State<MyHomePage> {
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (ctx, index) {
-                          return Container(
-                            margin: EdgeInsets.all(12),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    '${state.modelTech[index].urlToImage}',
-                                    height: 120,
-                                    width: 120,
-                                    fit: BoxFit.cover,
-                                  ),
+                          return GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailNews(
+                                  newsModel: state.modelTech[index],
                                 ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Flexible(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${state.modelTech[index].title}',
-                                        style: TextStyle(
-                                            color: Colors.black87,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14),
-                                        maxLines: 4,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        '${timeago.format(DateTime.parse(state.modelTech[index].publishedAt), locale: 'id')}',
-                                        style: TextStyle(
-                                            color: Colors.black45,
-                                            fontSize: 12),
-                                      ),
-                                      SizedBox(
-                                        height: 3,
-                                      ),
-                                      Text(
-                                        '${state.modelTech[index].source.name}',
-                                        style: TextStyle(
-                                            color: Colors.black45,
-                                            fontSize: 12),
-                                      )
-                                    ],
+                              ),
+                            ),
+                            child: Container(
+                              margin: EdgeInsets.all(12),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.network(
+                                      '${state.modelTech[index].urlToImage}',
+                                      height: 120,
+                                      width: 120,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                )
-                              ],
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${state.modelTech[index].title}',
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14),
+                                          maxLines: 4,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          '${timeago.format(DateTime.parse(state.modelTech[index].publishedAt), locale: 'id')}',
+                                          style: TextStyle(
+                                              color: Colors.black45,
+                                              fontSize: 12),
+                                        ),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
+                                        Text(
+                                          '${state.modelTech[index].source.name}',
+                                          style: TextStyle(
+                                              color: Colors.black45,
+                                              fontSize: 12),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           );
                         }),
